@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import json
 from flask import Flask, render_template, request, redirect, flash, url_for
 
@@ -29,11 +31,9 @@ def create_app():
 
     app.secret_key = 'something_special'
 
-
     @app.route('/')
     def index():
         return render_template('index.html')
-
 
     @app.route('/showSummary', methods=['POST'])
     def show_summary():
@@ -51,17 +51,17 @@ def create_app():
             # return redirect(url_for('index'))
             return render_template('index.html'), 404
 
-
     @app.route('/book/<competition>/<club>')
     def book(competition, club):
         found_club = [c for c in clubs if c['name'] == club][0]
         found_competition = [c for c in competitions if c['name'] == competition][0]
-        if found_club and found_competition:
+        today = str(datetime.now())
+        if found_club and found_competition and found_competition["date"] > today:
             return render_template('booking.html', club=found_club, competition=found_competition)
         else:
-            flash("Something went wrong-please try again")
-            return render_template('welcome.html', club=club, competitions=competitions)
-
+            flash('Sorry, this event is already passed. Impossible to book it.')
+            # reconstitution du dico cu club à partir de son nom
+            return render_template('welcome.html', club=found_club, competitions=competitions), 403
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchase_places():
@@ -72,9 +72,7 @@ def create_app():
         flash('Great-booking complete!')
         return render_template('welcome.html', club=club, competitions=competitions)
 
-
     # TODO: Add route for points display
-
 
     @app.route('/logout')
     def logout():

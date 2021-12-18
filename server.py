@@ -79,10 +79,7 @@ def create_app():
             else:
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
                 club['points'] = int(club['points']) - places_required
-                flash('Great-booking succeded!')
                 return render_template('welcome.html', club=club, competitions=competitions)
-
-    # TODO: Add route for points display
 
     @app.route('/logout')
     def logout():

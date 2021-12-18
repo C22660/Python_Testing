@@ -76,10 +76,16 @@ def create_app():
             if places_required > 12:
                 flash("Sorry, it's not possible to book more than 12 places.")
                 return render_template('booking.html', club=club, competition=competition), 403
+            elif int(club['points']) < places_required:
+                flash(f"Sorry, you have only {club['points']} points.")
+                return render_template('booking.html', club=club, competition=competition), 403
             else:
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
                 club['points'] = int(club['points']) - places_required
+                flash('Great-booking succeded!')
                 return render_template('welcome.html', club=club, competitions=competitions)
+
+    # TODO: Add route for points display
 
     @app.route('/logout')
     def logout():

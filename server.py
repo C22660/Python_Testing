@@ -44,7 +44,8 @@ def create_app():
             if c['email'] == request.form['email']:
                 club.append(c)
         if len(club) != 0:
-            return render_template('welcome.html', club=club[0], competitions=competitions)
+            return render_template('welcome.html', club=club[0], clubs=clubs,
+                                   competitions=competitions)
         else:
             message = flash_message_mail_unknown()
             flash(message)

@@ -22,3 +22,14 @@ def test_login_failed_because_email_user_unknown(client, mocker):
     data = response.data.decode()
     assert flash_message in data
     assert response.status_code == 404
+
+def test_list_of_clubs_visible_on_welcome_page(client):
+    """ vérifie que la page welcome.html reçoit bien les éléments clubs
+     et leurs points disponible une fois le secrétaire connecté"""
+
+    response = client.post('/showSummary', data={'email': "john@simplylift.co"},
+                           follow_redirects=True)
+    data = response.data.decode()
+    other_club_name = "Iron Temple"
+    assert other_club_name in data
+    assert response.status_code == 200

@@ -28,3 +28,16 @@ def test_after_booking_points_available_are_reduced(client):
 
     assert expected_result in data
     assert response.status_code == 200
+
+
+def test_not_possible_to_book_more_than_twelve_places(client):
+    """ vérifie quil n'est pas possible de réserver plus de 12 places."""
+    datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '20'}
+    # flash_message = "Sorry, it's not possible to book more than 12 places."
+    flash_message = "Sorry, it&#39;s not possible to book more than 12 places."
+    response = client.post('/purchasePlaces', data=datas, follow_redirects=True)
+    # data = response.data.decode("latin1")
+    data = response.data.decode()
+
+    assert flash_message in data
+    assert response.status_code == 403

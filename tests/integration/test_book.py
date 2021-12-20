@@ -44,7 +44,7 @@ def test_not_possible_to_book_more_than_twelve_places(client):
 
 
 def test_not_possible_to_book_more_than_points_available(client, mocker):
-    """ vérifie quil n'est pas possible de réserver plus de places que
+    """ vérifie qu'il n'est pas possible de réserver plus de places que
      de points disponibles pour le club."""
     # création d'un club avec un nombre de place faible :
     fake_club = [
@@ -57,6 +57,27 @@ def test_not_possible_to_book_more_than_points_available(client, mocker):
     mocker.patch.object(server, 'clubs', fake_club)
     datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '10'}
     flash_message = "Sorry, you have only 3 points."
+    response = client.post('/purchasePlaces', data=datas, follow_redirects=True)
+    data = response.data.decode()
+
+    assert flash_message in data
+    assert response.status_code == 403
+
+
+def test_not_possible_to_book_more_than_places_available(client, mocker):
+    """ vérifie qu'il n'est pas possible de réserver plus de places que
+     de places disponibles pour une compétition."""
+    # création d'une compétation avec un nombre de place faible :
+    fake_competition = [
+        {
+            "name": "Spring Festival",
+            "date": "2022-03-27 10:00:00",
+            "numberOfPlaces": "8"
+        }]
+    # remplacement des données du json par ce club modifié
+    mocker.patch.object(server, 'competitions', fake_competition)
+    datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '10'}
+    flash_message = "Sorry, not possible to book more than places available."
     response = client.post('/purchasePlaces', data=datas, follow_redirects=True)
     data = response.data.decode()
 

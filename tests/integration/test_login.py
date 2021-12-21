@@ -23,6 +23,7 @@ def test_login_failed_because_email_user_unknown(client, mocker):
     assert flash_message in data
     assert response.status_code == 404
 
+
 def test_list_of_clubs_visible_on_welcome_page(client):
     """ vérifie que la page welcome.html reçoit bien les éléments clubs
      et leurs points disponible une fois le secrétaire connecté"""
@@ -32,4 +33,16 @@ def test_list_of_clubs_visible_on_welcome_page(client):
     data = response.data.decode()
     other_club_name = "Iron Temple"
     assert other_club_name in data
+    assert response.status_code == 200
+
+
+def test_clubs_list_visible_for_visitors(client):
+    """ vérifie que, depuis la page index, le clic sur le bouton affiche une page
+     avec la liste des clubs"""
+
+    response = client.get(f'/clubsList')
+    text = "All clubs:"
+    data = response.data.decode()
+
+    assert text in data
     assert response.status_code == 200

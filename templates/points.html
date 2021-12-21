@@ -1,0 +1,31 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summary | Clubs</title>
+</head>
+<body>
+        <h2>View of all clubs</h2><a href="{{url_for('index')}}">Login</a>
+
+    {% with messages = get_flashed_messages()%}
+    {% if messages %}
+        <ul>
+       {% for message in messages %}
+            <li>{{message}}</li>
+        {% endfor %}
+       </ul>
+    {% endif%}
+    <h3>All clubs:</h3>
+    <ul>
+        {% for club in clubs%}
+        <li>
+            Name: {{club['name']}}<br />
+            Points available: {{club['points']}}</br>
+        </li>
+        <hr />
+        {% endfor %}
+    </ul>
+    {%endwith%}
+
+</body>
+</html>

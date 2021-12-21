@@ -77,7 +77,7 @@ def create_app():
             if places_required > 12:
                 flash("Sorry, it's not possible to book more than 12 places.")
                 return render_template('booking.html', club=club, competition=competition), 403
-            elif int(club['points']) < places_required:
+            elif int(club['points']) < (places_required*3):
                 flash(f"Sorry, you have only {club['points']} points.")
                 return render_template('booking.html', club=club, competition=competition), 403
             elif int(competition['numberOfPlaces']) < places_required:
@@ -85,7 +85,7 @@ def create_app():
                 return render_template('booking.html', club=club, competition=competition), 403
             else:
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-                club['points'] = int(club['points']) - places_required
+                club['points'] = int(club['points']) - (places_required*3)
                 flash('Great-booking succeded!')
                 return render_template('welcome.html', club=club, competitions=competitions)
 

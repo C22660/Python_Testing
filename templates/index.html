@@ -6,7 +6,9 @@
 </head>
 <body>
     <h1>Welcome to the GUDLFT Registration Portal!</h1>
-    Please enter your secretary email to continue:
+    Please enter your secretary email below to continue or clic on the button to see the clubs list:
+    <button><a href="{{ url_for('clubs_list') }}" name="club"  style=text-decoration:none>Clubs here</a></button>
+
     {% with messages = get_flashed_messages()%}
     {% if messages %}
         <ul>

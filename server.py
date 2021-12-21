@@ -90,6 +90,10 @@ def create_app():
                 return render_template('welcome.html', club=club, competitions=competitions)
 
     # TODO: Add route for points display
+    @app.route('/clubsList')
+    def clubs_list():
+        print("you are here")
+        return render_template('points.html', clubs=clubs)
 
     @app.route('/logout')
     def logout():

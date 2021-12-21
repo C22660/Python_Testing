@@ -20,11 +20,11 @@ def test_booking_place_in_past_competition_must_be_impossible(client):
 def test_after_booking_points_available_are_reduced(client):
     """ vérifie qu'une fois la réservation effectuée, les points disponibles
      aient bien été diminués du tarif de la réservation."""
-    datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '5'}
+    datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '2'}
     response = client.post('/purchasePlaces', data=datas, follow_redirects=True)
     data = response.data.decode()
-    # Après déduction des 5 places sur les 7 points, le template doit contenir :
-    expected_result = "Points available: 8"
+    # Après déduction des 2 places, soit 6 points sur les 13 points, le template doit contenir :
+    expected_result = "Points available: 7"
 
     assert expected_result in data
     assert response.status_code == 200
@@ -72,14 +72,35 @@ def test_not_possible_to_book_more_than_places_available(client, mocker):
         {
             "name": "Spring Festival",
             "date": "2022-03-27 10:00:00",
-            "numberOfPlaces": "8"
+            "numberOfPlaces": "3"
         }]
-    # remplacement des données du json par ce club modifié
+    # remplacement des données clubs car elles ont pu être modifiées en dur par les précédents tests
+    # se qui fait choué le test quanf il n'est pas lancé individuelement.
+    fake_clubs = [
+        {
+            "name": "Simply Lift",
+            "email": "john@simplylift.co",
+            "points": "13"
+        },
+        {
+            "name": "Iron Temple",
+            "email": "admin@irontemple.com",
+            "points": "4"
+        },
+        {"name": "She Lifts",
+         "email": "kate@shelifts.co.uk",
+         "points": "12"
+         }
+    ]
+    # remplacement des données du json par cette compétition modifiée
     mocker.patch.object(server, 'competitions', fake_competition)
-    datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '10'}
+    # remplacement des données du json par ces compétitions modifiée
+    mocker.patch.object(server, 'clubs', fake_clubs)
+    datas = {'club': 'Simply Lift', 'competition': 'Spring Festival', 'places': '4'}
     flash_message = "Sorry, not possible to book more than places available."
     response = client.post('/purchasePlaces', data=datas, follow_redirects=True)
     data = response.data.decode()
+    print(data)
 
     assert flash_message in data
     assert response.status_code == 403

@@ -50,7 +50,7 @@ def create_app():
             message = flash_message_mail_unknown()
             flash(message)
             # return redirect(url_for('index'))
-            return render_template('index.html'), 404
+            return render_template('index.html'), 200
 
     @app.route('/book/<competition>/<club>')
     def book(competition, club):
@@ -62,7 +62,7 @@ def create_app():
         else:
             flash('Sorry, this event is already passed. Impossible to book it.')
             # reconstitution du dico cu club à partir de son nom
-            return render_template('welcome.html', club=found_club, competitions=competitions), 403
+            return render_template('welcome.html', club=found_club, competitions=competitions), 200
 
     @app.route('/purchasePlaces', methods=['POST'])
     def purchase_places():
@@ -72,17 +72,17 @@ def create_app():
         today = str(datetime.now())
         if competition["date"] < today:
             flash('Sorry, this event is already passed. Impossible to book it')
-            return render_template('welcome.html', club=club, competitions=competitions), 403
+            return render_template('welcome.html', club=club, competitions=competitions), 200
         else:
             if places_required > 12:
                 flash("Sorry, it's not possible to book more than 12 places.")
-                return render_template('booking.html', club=club, competition=competition), 403
+                return render_template('booking.html', club=club, competition=competition), 200
             elif int(club['points']) < (places_required*3):
                 flash(f"Sorry, you have only {club['points']} points.")
-                return render_template('booking.html', club=club, competition=competition), 403
+                return render_template('booking.html', club=club, competition=competition), 200
             elif int(competition['numberOfPlaces']) < places_required:
                 flash(f"Sorry, not possible to book more than places available.")
-                return render_template('booking.html', club=club, competition=competition), 403
+                return render_template('booking.html', club=club, competition=competition), 200
             else:
                 competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
                 club['points'] = int(club['points']) - (places_required*3)
@@ -92,7 +92,6 @@ def create_app():
     # TODO: Add route for points display
     @app.route('/clubsList')
     def clubs_list():
-        print("you are here")
         return render_template('points.html', clubs=clubs)
 
     @app.route('/logout')

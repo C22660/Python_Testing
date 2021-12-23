@@ -14,7 +14,7 @@ def test_booking_place_in_past_competition_must_be_impossible(client):
     data = response.data.decode()
 
     assert flash_message in data
-    assert response.status_code == 403
+    assert response.status_code == 200
 
 
 def test_after_booking_points_available_are_reduced(client):
@@ -40,7 +40,7 @@ def test_not_possible_to_book_more_than_twelve_places(client):
     data = response.data.decode()
 
     assert flash_message in data
-    assert response.status_code == 403
+    assert response.status_code == 200
 
 
 def test_not_possible_to_book_more_than_points_available(client, mocker):
@@ -61,7 +61,7 @@ def test_not_possible_to_book_more_than_points_available(client, mocker):
     data = response.data.decode()
 
     assert flash_message in data
-    assert response.status_code == 403
+    assert response.status_code == 200
 
 
 def test_not_possible_to_book_more_than_places_available(client, mocker):
@@ -100,7 +100,6 @@ def test_not_possible_to_book_more_than_places_available(client, mocker):
     flash_message = "Sorry, not possible to book more than places available."
     response = client.post('/purchasePlaces', data=datas, follow_redirects=True)
     data = response.data.decode()
-    print(data)
 
     assert flash_message in data
-    assert response.status_code == 403
+    assert response.status_code == 200

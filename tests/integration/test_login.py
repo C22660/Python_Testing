@@ -21,7 +21,7 @@ def test_login_failed_because_email_user_unknown(client, mocker):
     response = client.post('/showSummary', data={'email': email}, follow_redirects=True)
     data = response.data.decode()
     assert flash_message in data
-    assert response.status_code == 404
+    assert response.status_code == 200
 
 
 def test_list_of_clubs_visible_on_welcome_page(client):

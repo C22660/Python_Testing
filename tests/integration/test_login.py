@@ -1,11 +1,21 @@
-""" Ici, client associé à une url qui va appeler une vue système => tests d'intégration
+""" Ici, client associé à une url qui va appeler une vue système donc tests d'intégration
 """
 
 
+def test_login_succeeded_with_email_user_known(client):
+    """ Vérifie que la fonction show_summary affiche bien la page suivante
+    lorsque l'email est connu"""
+    email = "john@simplylift.co"
+    welcome_message = "Welcome, john@simplylift.co"
+    response = client.post('/showSummary', data={'email': email}, follow_redirects=True)
+    data = response.data.decode()
+    assert welcome_message in data
+    assert response.status_code == 200
+
+
 def test_login_failed_because_email_user_unknown(client, mocker):
-    """ vérifie que la fonction show_summary affiche bien un message lorsque
+    """ Vérifie que la fonction show_summary affiche bien un message lorsque
      le mail saisi est inconnu"""
-    # email = "john@simplylift.co"
     email = "john_doe@exo.com"
     # !! Pour ne pas être dépendant du message qui pourrait être modifié,
     # Ici, définition du message attendu
@@ -25,8 +35,8 @@ def test_login_failed_because_email_user_unknown(client, mocker):
 
 
 def test_list_of_clubs_visible_on_welcome_page(client):
-    """ vérifie que la page welcome.html reçoit bien les éléments clubs
-     et leurs points disponible une fois le secrétaire connecté"""
+    """ Vérifie que la page welcome.html reçoit bien les éléments clubs
+     et leurs points disponibles une fois le secrétaire connecté"""
 
     response = client.post('/showSummary', data={'email': "john@simplylift.co"},
                            follow_redirects=True)
@@ -37,7 +47,7 @@ def test_list_of_clubs_visible_on_welcome_page(client):
 
 
 def test_clubs_list_visible_for_visitors(client):
-    """ vérifie que, depuis la page index, le clic sur le bouton affiche une page
+    """ Vérifie que, depuis la page index, le clic sur le bouton affiche une page
      avec la liste des clubs"""
 
     response = client.get(f'/clubsList')

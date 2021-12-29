@@ -44,8 +44,10 @@
 
 5. Testing
 
-    You are free to use whatever testing framework you like-the main thing is that you can show what tests you are using.
+    This app has been tested with Pytest.
 
-    We also like to show how well we're testing, so there's a module called 
-    [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) you should add to your project.
+    A module called [coverage](https://coverage.readthedocs.io/en/coverage-5.1/) is added to this project.
+    The coverage rate is 94%.
+
+    The performance testing has been made by [locust](https://locust.io/)
 

@@ -27,8 +27,6 @@ def flash_message_mail_unknown():
 
 def create_app():
     app = Flask(__name__)
-    # app.config.from_object(config)
-
     app.secret_key = 'something_special'
 
     @app.route('/')
@@ -37,8 +35,6 @@ def create_app():
 
     @app.route('/showSummary', methods=['POST'])
     def show_summary():
-        # club = [club for club in clubs if club['email'] == request.form['email']][0]
-        # return render_template('welcome.html', club=club, competitions=competitions)
         club = []
         for c in clubs:
             if c['email'] == request.form['email']:
@@ -49,7 +45,6 @@ def create_app():
         else:
             message = flash_message_mail_unknown()
             flash(message)
-            # return redirect(url_for('index'))
             return render_template('index.html'), 200
 
     @app.route('/book/<competition>/<club>')
